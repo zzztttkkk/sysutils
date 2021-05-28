@@ -1,15 +1,15 @@
 & $HOME/.pyenv/Scripts/activate.ps1
 
-function ensuredocker(){
-    $ErrorActionPreference = 'SilentlyContinue';
+function ensure-docker-engine(){
+	$ErrorActionPreference = 'SilentlyContinue';
     $docker_pid=get-process "Docker Desktop" | select -expand id;
     if($docker_pid){
         return;
     }
-    
+
     start-process "C:/Program Files/Docker/Docker/Docker Desktop.exe" -NoNewWindow;
     while(1){
-        $msg=docker version|grep Server 2>$null;
+        $msg=(docker version | grep Server) 2>$null;
         if($msg){
             return;
         }
@@ -21,7 +21,14 @@ function run(){
     param(
         [string] $name
     )
-    ensuredocker;
+    
+    if($name -eq "ssh"){
+        wsl -u root service ssh restart
+        return
+    }
+
+	ensure-docker-engine | out-null;
+
     docker start $name
 }
 
@@ -29,6 +36,8 @@ function runall(){
     run("redisdb");
     run("postgresdb");
     run("postgresdbs");
+    run("mysqldb");
+	run("ssh");
 }
 
 function mcli(){
@@ -50,7 +59,7 @@ function pcli(){
     )
 
     run("postgresdb");
-
+	run("postgresdbs");
 
     if (!$dbname){
         $dbname="postgres"
@@ -63,7 +72,8 @@ function pscli(){
         [string] $dbname
     )
 
-    run("postgresdbs");
+    run("postgresdb");
+	run("postgresdbs");
 
     if (!$dbname){
         $dbname="postgres"
@@ -87,6 +97,11 @@ function google ($search) {
 function bing ($search) {
     $url = "https://cn.bing.com/search?ensearch=1&q=" + $search
     Start-Process $url
+}
+
+function useproxy(){
+    $env:http_proxy="http://127.0.0.1:50266"
+    $env:https_proxy="http://127.0.0.1:50266"
 }
 
 echo "Everything is complicated."
