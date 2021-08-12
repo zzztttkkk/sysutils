@@ -17,7 +17,7 @@ function ensuredockerengine() {
     }
 }
 
-function run() {
+function rundockerservice() {
     param(
         [string] $name
     )
@@ -32,12 +32,12 @@ function run() {
     docker start $name
 }
 
-function runall() {
-    run("redisdb");
-    run("postgresdb");
-    run("postgresdbs");
-    run("mysqldb");
-    run("ssh");
+function runalldockerservices() {
+    rundockerservice("redisdb");
+    rundockerservice("postgresdb");
+    rundockerservice("postgresdbs");
+    rundockerservice("mysqldb");
+    rundockerservice("ssh");
 }
 
 function mcli() {
@@ -45,7 +45,7 @@ function mcli() {
         [string] $dbname
     )
 
-    run("mysqldb");
+    rundockerservice("mysqldb");
 
     if (!$dbname) {
         $dbname = "mysql"
@@ -58,8 +58,8 @@ function pcli() {
         [string] $dbname
     )
 
-    run("postgresdb");
-    run("postgresdbs");
+    rundockerservice("postgresdb");
+    rundockerservice("postgresdbs");
 
     if (!$dbname) {
         $dbname = "postgres"
@@ -67,22 +67,8 @@ function pcli() {
     pgcli postgres://postgres:123456@127.0.0.1:15432/$dbname
 }
 
-function pscli() {
-    param(
-        [string] $dbname
-    )
-
-    run("postgresdb");
-    run("postgresdbs");
-
-    if (!$dbname) {
-        $dbname = "postgres"
-    }
-    pgcli postgres://postgres:123456@127.0.0.1:15433/$dbname
-}
-
-function redcli() {
-    run("redisdb");
+function rcli() {
+    rundockerservice("redisdb");
     docker exec -it redisdb redis-cli
 }
 
@@ -94,7 +80,7 @@ function mgcli(){
     if (!$dbname) {
         $dbname = "admin"
     }
-    run("mongo");
+    rundockerservice("mongo");
     docker exec -it mongo mongosh $dbname -u root -p example
 }
 
@@ -122,11 +108,10 @@ function pullall {
         [string] $dir
     )
 
-
     $cwd = Get-Location
 
     if ($dir -eq "") {
-        $dir = "~/Codes"
+        $dir = "~/codes"
     }
 
     foreach ($item in Get-ChildItem $dir) {
