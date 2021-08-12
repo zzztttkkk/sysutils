@@ -59,7 +59,6 @@ function pcli() {
     )
 
     rundockerservice("postgresdb");
-    rundockerservice("postgresdbs");
 
     if (!$dbname) {
         $dbname = "postgres"
@@ -81,7 +80,7 @@ function mgcli(){
         $dbname = "admin"
     }
     rundockerservice("mongo");
-    docker exec -it mongo mongosh $dbname -u root -p example
+    docker exec -it mongo mongosh $dbname -u root -p 123456
 }
 
 Set-Alias which Get-Command
