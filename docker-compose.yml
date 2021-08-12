@@ -31,22 +31,6 @@ services:
             - POSTGRESQL_DATABASE=testing
             - ALLOW_EMPTY_PASSWORD=yes
 
-    postgresql-slave:
-        container_name: postgresdbs
-        image: docker.io/bitnami/postgresql:12
-        ports:
-            - '127.0.0.1:15433:5432'
-        depends_on:
-            - postgresql-master
-        environment:
-            - POSTGRESQL_REPLICATION_MODE=slave
-            - POSTGRESQL_REPLICATION_USER=postgres
-            - POSTGRESQL_REPLICATION_PASSWORD=123456
-            - POSTGRESQL_MASTER_HOST=postgresql-master
-            - POSTGRESQL_PASSWORD=123456
-            - POSTGRESQL_MASTER_PORT_NUMBER=5432
-            - ALLOW_EMPTY_PASSWORD=yes
-
     mongo:
         container_name: mongo
         image: mongo
@@ -55,4 +39,5 @@ services:
             - '127.0.0.1:27017:27017'
         environment:
             - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=123456
+            - MONGO_INITDB_ROOT_PASSWORD=example
+
