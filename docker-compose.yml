@@ -9,11 +9,14 @@ services:
             - "127.0.0.1:13306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: 123456
+
     redisdb:
         container_name: redisdb
         image: redis
+        restart: always
         ports:
             - "127.0.0.1:16379:6379"
+
     postgresql-master:
         container_name: postgresdb
         image: docker.io/bitnami/postgresql:12
@@ -27,6 +30,7 @@ services:
             - POSTGRESQL_PASSWORD=123456
             - POSTGRESQL_DATABASE=testing
             - ALLOW_EMPTY_PASSWORD=yes
+
     postgresql-slave:
         container_name: postgresdbs
         image: docker.io/bitnami/postgresql:12
@@ -42,4 +46,13 @@ services:
             - POSTGRESQL_PASSWORD=123456
             - POSTGRESQL_MASTER_PORT_NUMBER=5432
             - ALLOW_EMPTY_PASSWORD=yes
- 
+
+    mongo:
+        container_name: mongo
+        image: mongo
+        restart: always
+        ports:
+            - '127.0.0.1:27017:27017'
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=123456
