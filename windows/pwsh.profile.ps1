@@ -81,9 +81,21 @@ function pscli() {
     pgcli postgres://postgres:123456@127.0.0.1:15433/$dbname
 }
 
-function rcli() {
+function redcli() {
     run("redisdb");
     docker exec -it redisdb redis-cli
+}
+
+function mgcli(){
+    param(
+        [string] $dbname
+    )
+
+    if (!$dbname) {
+        $dbname = "admin"
+    }
+    run("mongo");
+    docker exec -it mongo mongosh $dbname -u root -p example
 }
 
 Set-Alias which Get-Command
@@ -114,7 +126,7 @@ function pullall {
     $cwd = Get-Location
 
     if ($dir -eq "") {
-        $dir = "~/codes"
+        $dir = "~/Codes"
     }
 
     foreach ($item in Get-ChildItem $dir) {
