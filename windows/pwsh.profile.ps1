@@ -1,87 +1,4 @@
-& $HOME/.pyvenv/Scripts/activate.ps1
-
-function ensuredockerengine() {
-    $ErrorActionPreference = 'SilentlyContinue';
-    $docker_pid = get-process "Docker Desktop" | Select-Object -expand id;
-    if ($docker_pid) {
-        return;
-    }
-
-    start-process "C:/Program Files/Docker/Docker/Docker Desktop.exe" -NoNewWindow;
-    while (1) {
-        $msg = (docker version | grep Server) 2>$null;
-        if ($msg) {
-            return;
-        }
-        start-sleep 1;
-    }
-}
-
-function rundockerservice() {
-    param(
-        [string] $name
-    )
-    
-    if ($name -eq "ssh") {
-        wsl -u root service ssh restart
-        return
-    }
-
-    ensuredockerengine | out-null;
-
-    docker start $name
-}
-
-function runalldockerservices() {
-    rundockerservice("redisdb");
-    rundockerservice("postgresdb");
-    rundockerservice("postgresdbs");
-    rundockerservice("mysqldb");
-    rundockerservice("ssh");
-}
-
-function mcli() {
-    param(
-        [string] $dbname
-    )
-
-    rundockerservice("mysqldb");
-
-    if (!$dbname) {
-        $dbname = "mysql"
-    }
-    mycli mysql://root:123456@127.0.0.1:13306/$dbname
-}
-
-function pcli() {
-    param(
-        [string] $dbname
-    )
-
-    rundockerservice("postgresdb");
-
-    if (!$dbname) {
-        $dbname = "postgres"
-    }
-    pgcli postgres://postgres:123456@127.0.0.1:15432/$dbname
-}
-
-function rcli() {
-    rundockerservice("redisdb");
-    docker exec -it redisdb redis-cli
-}
-
-function mgcli(){
-    param(
-        [string] $dbname
-    )
-
-    if (!$dbname) {
-        $dbname = "admin"
-    }
-    rundockerservice("mongo");
-    docker exec -it mongo mongosh $dbname -u root -p 123456
-}
+& $HOME/.pyenv/Scripts/activate.ps1
 
 Set-Alias which Get-Command
 Set-Alias grep Select-String
@@ -97,30 +14,79 @@ function bing ($search) {
 }
 
 function useproxy() {
-    $env:http_proxy = "http://127.0.0.1:50212"
-    $env:https_proxy = "http://127.0.0.1:50212"
+    $env:http_proxy = "http://127.0.0.1:54113"
+    $env:https_proxy = "http://127.0.0.1:54113"
 }
 
-
-function pullall {
+function sshc {
     param (
-        [string] $dir
+        [String] $name
     )
+    $m = @{
+        "18" = "sjserver02@192.168.20.18";
+    };
+    ssh $m[$name];
+}
 
-    $cwd = Get-Location
+function mcli {
+    mycli mysql://root:123456@127.0.0.1:13306/mysql
+}
 
-    if ($dir -eq "") {
-        $dir = "~/codes"
-    }
+function pcli {
+    pgcli postgres://postgres:123456@127.0.0.1:15432/postgres
+}
+function rcli {
+    docker exec -it redisdb redis-cli    
+}
 
-    foreach ($item in Get-ChildItem $dir) {
-        if ($item.PSIsContainer) {
-            if (Test-Path "$item/.git") {
-                Write-Host "git pull $item"
-                Set-Location $item
-                git pull
-            }
-        }
-    }
-    Set-Location $cwd
+function mgcli {
+    docker exec -it mongodb mongosh -u root -p 123456
+}
+
+function tsrun {
+    param (
+        [String] $name
+    )
+    node --require ts-node/register $name
+}
+
+function exceltool() {
+    pythonw D:\\works\\export_tools\\gui.py
+}
+
+function pbtool() {
+    pythonw D:\works\akaserver\AkaProto\tools\proto_test_tool\client.py    
+}
+
+function pullakaproposal() {
+    $cwd = Get-Location;
+    Set-Location D:\\works\\akaproposal
+    git pull
+    Set-Location $cwd;
+}
+                                                 
+function enableproxy {
+    $env:http_proxy = "http://127.0.0.1:54113"
+    $env:https_proxy = "http://127.0.0.1:54113"
+}
+
+function disableproxy {
+    $env:http_proxy = $null
+    $env:https_proxy = $null
+}
+
+function pull {
+    git pull    
+}
+
+function push {
+    git push    
+}
+
+function commit {
+    git commit 
+}
+
+function stash {
+    git pull    
 }
