@@ -18,14 +18,14 @@ function useproxy() {
     $env:https_proxy = "http://127.0.0.1:54113"
 }
 
+$global:__SSHCMap = @{};
+
 function sshc {
     param (
         [String] $name
     )
-    $m = @{
-        "18" = "sjserver02@192.168.20.18";
-    };
-    ssh $m[$name];
+    
+    ssh $__SSHCMap[$name];
 }
 
 function mcli {
@@ -75,18 +75,36 @@ function disableproxy {
     $env:https_proxy = $null
 }
 
-function pull {
+function gpull {
     git pull    
 }
 
-function push {
+function gpush {
     git push    
 }
 
-function commit {
-    git commit 
+function gcommit() {
+    git commit $args
 }
 
-function stash {
+function gstash {
     git pull    
+}
+
+function gstatus {
+    git status    
+}
+
+function gadd {
+    git add $args    
+}
+
+function greset {
+    git reset $args   
+}
+
+$script:localPs = "$PSScriptRoot/local.ps1";
+
+if (Test-Path $script:localPs) {
+    . $script:localPs
 }
