@@ -13,19 +13,25 @@ function bing ($search) {
     Start-Process $url
 }
 
+$global:proxy = "";
+
 function useproxy() {
-    $env:http_proxy = "http://127.0.0.1:54113"
-    $env:https_proxy = "http://127.0.0.1:54113"
+    $env:http_proxy = $global:proxy
+    $env:https_proxy = $global:proxy
 }
 
-$global:__SSHCMap = @{};
+function resetproxy() {
+    $env:http_proxy = ""
+    $env:https_proxy = ""
+}
+
+$global:__sshcMap = @{};
 
 function sshc {
     param (
         [String] $name
     )
-    
-    ssh $__SSHCMap[$name];
+    ssh $global:__sshcMap[$name];
 }
 
 function mcli {
@@ -40,71 +46,33 @@ function rcli {
 }
 
 function mgcli {
-    docker exec -it mongodb mongosh -u root -p 123456
+    docker exec -it mongo mongosh -u root -p 123456
 }
 
-function tsrun {
-    param (
-        [String] $name
-    )
-    node --require ts-node/register $name
+function gs() {
+    git status
 }
 
-function exceltool() {
-    pythonw D:\\works\\export_tools\\gui.py
-}
-
-function pbtool() {
-    pythonw D:\works\akaserver\AkaProto\tools\proto_test_tool\client.py    
-}
-
-function pullakaproposal() {
-    $cwd = Get-Location;
-    Set-Location D:\\works\\akaproposal
+function gp() {
     git pull
-    Set-Location $cwd;
-}
-                                                 
-function enableproxy {
-    $env:http_proxy = "http://127.0.0.1:54113"
-    $env:https_proxy = "http://127.0.0.1:54113"
 }
 
-function disableproxy {
-    $env:http_proxy = $null
-    $env:https_proxy = $null
+function gam() {
+    param (
+        [String] $msg
+    )
+    git add *
+    git commit -am $msg
 }
 
-function gpull {
-    git pull    
+function gl1(){
+    git log -1
 }
 
-function gpush {
-    git push    
+$ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
+$local = "$ScriptDir/local.ps1"
+if (Test-Path -Path $local) {
+    . $local
 }
 
-function gcommit() {
-    git commit $args
-}
 
-function gstash {
-    git pull    
-}
-
-function gstatus {
-    git status    
-}
-
-function gadd {
-    git add $args    
-}
-
-function greset {
-    git reset $args   
-}
-
-$script:localPs = "$PSScriptRoot/local.ps1";
-
-if (Test-Path $script:localPs) {
-    . $script:localPs
-}
