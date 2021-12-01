@@ -69,10 +69,16 @@ function gl1(){
     git log -1
 }
 
-$ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
+
+$ScriptDir = "~/Documents/WindowsPowerShell"
+
+function pwsh(){
+	. $ScriptDir/Profile.ps1
+	Clear-Host
+}
+
 $local = "$ScriptDir/local.ps1"
 if (Test-Path -Path $local) {
     . $local
 }
-
 
