@@ -81,4 +81,4 @@ $local = "$ScriptDir/local.ps1"
 if (Test-Path -Path $local) {
     . $local
 }
-
+Clear-Host
