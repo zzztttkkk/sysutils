@@ -69,6 +69,15 @@ function gl1(){
     git log -1
 }
 
+function pullc(){
+    $currentBranch = git branch --show-current
+    git pull origin $currentBranch 
+}
+
+function pushc(){
+    $currentBranch = git branch --show-current
+    git push origin $currentBranch 
+}
 
 $ScriptDir = "~/Documents/WindowsPowerShell"
 
