@@ -69,6 +69,14 @@ function gl1(){
     git log -1
 }
 
+function grh(){
+    git reset --hard
+}
+
+function gdiff(){
+    git diff
+}
+
 function pullc(){
     $currentBranch = git branch --show-current
     git pull origin $currentBranch 
