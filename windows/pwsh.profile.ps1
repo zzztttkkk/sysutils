@@ -1,4 +1,4 @@
-& $HOME/.pyenv/Scripts/activate.ps1
+& $HOME/.pyvenv/Scripts/activate.ps1
 
 Set-Alias which Get-Command
 Set-Alias grep Select-String
@@ -53,10 +53,6 @@ function gs() {
     git status
 }
 
-function gp() {
-    git pull
-}
-
 function gam() {
     param (
         [String] $msg
@@ -65,16 +61,8 @@ function gam() {
     git commit -am $msg
 }
 
-function gl1(){
-    git log -1
-}
-
 function grh(){
     git reset --hard
-}
-
-function gdiff(){
-    git diff
 }
 
 function pullc(){
@@ -92,6 +80,10 @@ $ScriptDir = "~/Documents/WindowsPowerShell"
 function pwsh(){
 	. $ScriptDir/Profile.ps1
 	Clear-Host
+}
+
+function allInstalled(){
+    Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize
 }
 
 $local = "$ScriptDir/local.ps1"
