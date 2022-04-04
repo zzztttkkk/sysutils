@@ -1,4 +1,4 @@
-& $HOME/.pyvenv/Scripts/activate.ps1
+& $HOME/.pyenv/Scripts/activate.ps1
 
 Set-Alias which Get-Command
 Set-Alias grep Select-String
@@ -42,7 +42,7 @@ function pcli {
     pgcli postgres://postgres:123456@127.0.0.1:15432/postgres
 }
 function rcli {
-    docker exec -it redisdb redis-cli    
+    docker exec -it redis redis-cli    
 }
 
 function mgcli {
@@ -65,26 +65,11 @@ function grh(){
     git reset --hard
 }
 
-function pullc(){
-    $currentBranch = git branch --show-current
-    git pull origin $currentBranch 
+function wslip(){
+	wsl hostname -I
 }
 
-function pushc(){
-    $currentBranch = git branch --show-current
-    git push origin $currentBranch 
-}
-
-$ScriptDir = "~/Documents/WindowsPowerShell"
-
-function pwsh(){
-	. $ScriptDir/Profile.ps1
-	Clear-Host
-}
-
-function allInstalled(){
-    Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize
-}
+$global:ScriptDir = "~/Documents/WindowsPowerShell"
 
 $local = "$ScriptDir/local.ps1"
 if (Test-Path -Path $local) {
