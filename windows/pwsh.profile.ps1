@@ -69,10 +69,8 @@ function wslip(){
 	wsl hostname -I
 }
 
-$global:ScriptDir = "~/Documents/WindowsPowerShell"
 
-$local = "$ScriptDir/local.ps1"
+$local = "$PSScriptRoot/local.ps1"
 if (Test-Path -Path $local) {
     . $local
 }
-Clear-Host
