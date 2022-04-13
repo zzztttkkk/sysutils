@@ -65,6 +65,18 @@ function grh(){
     git reset --hard
 }
 
+function gpa(){
+    param (
+        [String] $branch
+    )
+
+    if($branch.length -eq 0){
+        $branch = &git rev-parse --abbrev-ref HEAD
+    }
+    git submodule foreach --recursive "git pull origin $branch"
+    git pull origin $branch
+}
+
 function wslip(){
 	wsl hostname -I
 }
