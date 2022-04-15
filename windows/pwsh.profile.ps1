@@ -57,6 +57,9 @@ function gam() {
     param (
         [String] $msg
     )
+    if($msg.length -eq 0){
+        $msg = "-";
+    }
     git add *
     git commit -am $msg
 }
