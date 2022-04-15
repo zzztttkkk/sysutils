@@ -77,6 +77,16 @@ function gpa(){
     git pull origin $branch
 }
 
+function gpc(){
+    param (
+        [String] $branch
+    )
+    if($branch.length -eq 0){
+        $branch = &git rev-parse --abbrev-ref HEAD
+    }
+    git push origin $branch
+}
+
 function wslip(){
 	wsl hostname -I
 }
