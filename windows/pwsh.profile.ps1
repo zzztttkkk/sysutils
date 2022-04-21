@@ -94,6 +94,7 @@ function wslip(){
 	wsl hostname -I
 }
 
+wsl -d Ubuntu-20.04 -u root service docker status
 
 $local = "$PSScriptRoot/local.ps1"
 if (Test-Path -Path $local) {
