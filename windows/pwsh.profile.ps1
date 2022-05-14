@@ -35,18 +35,22 @@ function sshc {
 }
 
 function mcli {
-    mycli mysql://root:123456@127.0.0.1:13306/mysql
+    mycli mysql://root:123456@127.0.0.1:3306/mysql
 }
 
 function pcli {
-    pgcli postgres://postgres:123456@127.0.0.1:15432/postgres
+    pgcli postgres://postgres:123456@127.0.0.1:5432/postgres
 }
 function rcli {
-    docker exec -it redis redis-cli    
+    wsl -u root docker exec -it redis redis-cli    
 }
 
 function mgcli {
-    docker exec -it mongo mongosh -u root -p 123456
+    wsl -u root docker exec -it mongo mongosh -u root -p 123456
+}
+
+function docker(){
+    wsl -u root docker $args
 }
 
 function gs() {
@@ -94,9 +98,10 @@ function wslip(){
 	wsl hostname -I
 }
 
-wsl -d Ubuntu-20.04 -u root service docker start
 
 $local = "$PSScriptRoot/local.ps1"
 if (Test-Path -Path $local) {
     . $local
 }
+
+wsl -d Ubuntu-20.04 -u root service docker start
