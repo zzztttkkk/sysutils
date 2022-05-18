@@ -49,10 +49,6 @@ function mgcli {
     wsl -u root docker exec -it mongo mongosh -u root -p 123456
 }
 
-function docker(){
-    wsl -u root docker $args
-}
-
 function gs() {
     git status
 }
@@ -72,7 +68,7 @@ function grh(){
     git reset --hard
 }
 
-function gpa(){
+function pulla(){
     param (
         [String] $branch
     )
@@ -84,7 +80,12 @@ function gpa(){
     git pull origin $branch
 }
 
-function gpc(){
+function gsa(){
+    git status
+    git submodule foreach --recursive "git status"
+}
+
+function pushc(){
     param (
         [String] $branch
     )
@@ -98,10 +99,15 @@ function wslip(){
 	wsl hostname -I
 }
 
+function service(){
+    wsl -u root service $args
+}
+
+function dev(){
+    wsl -d Ubuntu-20.04 -u root service docker start
+}
 
 $local = "$PSScriptRoot/local.ps1"
 if (Test-Path -Path $local) {
     . $local
 }
-
-wsl -d Ubuntu-20.04 -u root service docker start
